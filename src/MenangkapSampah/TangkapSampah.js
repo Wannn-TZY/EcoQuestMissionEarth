@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // pakai default "Guest" kalau belum ada nama
-    let playerName = localStorage.getItem('playerName') || "Guest";
+    let playerName = localStorage.getItem('playerName') || "";
 
-    // Background music setup
     const backgroundMusic = new Audio('../../backsound/backsound-game2.mp3');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.5;
@@ -23,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lives = 3;
     let timer = 15;
     let gameInterval;
-    let isGameRunning = true;
+    let isGameRunning = false;
     let gameInitialized = false;
     let spawnInterval;
 
@@ -82,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveToLeaderboard(score, game) {
         const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
         const newEntry = {
-            name: playerName,
+            name: playerName || "Guest",
             score,
             game,
             date: new Date().toISOString()
@@ -124,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
-    // Event listeners untuk popup
+    // Event listeners popup akhir game
     document.getElementById('play-again').addEventListener('click', resetGame);
     document.getElementById('back-to-menu').addEventListener('click', () => {
         window.location.href = '../PilihPermainan/PilihPermainan.html';
@@ -240,6 +238,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 
-    // langsung mulai game tanpa popup nama
-    initGame();
+    // 🔹 Popup Input Nama
+    const namePopup = document.getElementById('name-popup');
+    const startGameBtn = document.getElementById('start-game-btn');
+    const nameInput = document.getElementById('player-name-input');
+
+    namePopup.classList.remove('hidden'); // tampilkan popup saat load
+
+    startGameBtn.addEventListener('click', () => {
+        const inputName = nameInput.value.trim();
+        if (inputName !== "") {
+            playerName = inputName;
+            localStorage.setItem('playerName', playerName);
+        } else {
+            playerName = "Guest";
+        }
+        namePopup.classList.add('hidden');
+        initGame();
+    });
 });

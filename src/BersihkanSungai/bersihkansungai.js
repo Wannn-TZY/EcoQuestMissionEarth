@@ -179,6 +179,38 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
     }
 
-    // 🚀 langsung mulai game tanpa input nama
-    startGame();
+   /* ====================== POPUP NAMA ====================== */
+function showNamePopup() {
+    if (document.querySelector('.popup-overlay')) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'popup-overlay';
+    overlay.innerHTML = `
+        <div class="name-popup">
+            <h2>Selamat Datang di EcoQuest!</h2>
+            <input type="text" id="player-name" placeholder="Masukkan nama kamu..." maxlength="15">
+            <button id="start-btn" disabled>Mulai Bermain</button>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const nameInput = overlay.querySelector('#player-name');
+    const startBtn = overlay.querySelector('#start-btn');
+
+    nameInput.addEventListener('input', () => {
+        startBtn.disabled = nameInput.value.trim() === "";
+    });
+
+    startBtn.addEventListener('click', () => {
+        playerName = nameInput.value.trim() || "Guest";
+        localStorage.setItem('playerName', playerName);
+
+        overlay.remove();
+        startGame();
+    });
+}
+
+// 🚀 tampilkan popup nama sebelum mulai
+showNamePopup();
+
 });
