@@ -35,11 +35,11 @@ body {
 
 .trash-item {
     position: absolute;
-    width: 40px;  /* Reduced from 60px */
-    height: 40px; /* Reduced from 60px */
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     transition: transform 0.2s;
-    object-fit: contain; /* Added to maintain aspect ratio */
+    object-fit: contain;
 }
 
 .trash-item:hover {
@@ -47,15 +47,15 @@ body {
 }
 
 .trash-bins {
-    position: fixed; /* Ubah dari absolute ke fixed */
+    position: fixed;
     bottom: 20px;
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: center; /* Ubah dari space-around ke center */
-    gap: 100px; /* Tambahkan gap untuk spacing yang lebih baik */
-    padding: 0 20px; /* Kurangi padding */
-    z-index: 10; /* Tambahkan z-index */
+    justify-content: center;
+    gap: 100px;
+    padding: 0 20px;
+    z-index: 10;
 }
 
 .bin {
@@ -63,14 +63,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 120px; /* Tetapkan lebar spesifik */
+    width: 120px;
 }
 
 .bin img {
     width: 100px;
     height: 120px;
     object-fit: contain;
-    display: block; /* Pastikan gambar ditampilkan sebagai block */
+    display: block;
     margin-bottom: 5px;
 }
 
@@ -139,18 +139,17 @@ body {
 
 .popup-buttons {
    position: absolute;
-    bottom: 1.5%; /* Bisa disesuaikan kalau perlu lebih turun */
+    bottom: 1.5%;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
-    gap: 20px; /* sedikit lebih sempit jaraknya */
+    gap: 20px;
     animation: buttonsAppear 0.5s ease-out 0.5s both;
 }
 
-
 .popup-button {
-    width: 90px; /* kecilin dari 120px */
+    width: 90px;
     height: auto;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -161,7 +160,7 @@ body {
     filter: brightness(1.2);
 }
 
-/* Add these keyframe animations */
+/* Animations */
 @keyframes scoreColorChange {
     0% { color: #FFD700; }
     33% { color: #98FB98; }
@@ -206,7 +205,6 @@ body {
     }
 }
 
-/* Status bar score animation */
 .status-bar .score {
     animation: scoreColorChange 4s infinite;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -226,13 +224,15 @@ body {
     z-index: 2000;
 }
 
-.popup-overlay .popup-content {
+.name-popup {
     background: #ffffff;
     padding: 30px 40px;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     animation: popupFadeIn 0.4s ease-out;
+    transform: none; /* override agar tidak scale kecil */
+    opacity: 1;
 }
 
 .popup-overlay h2 {
@@ -265,10 +265,6 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -ms-transition: all 0.3s;
-    -o-transition: all 0.3s;
 }
 
 .popup-overlay button:disabled {

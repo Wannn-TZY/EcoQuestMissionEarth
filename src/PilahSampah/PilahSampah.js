@@ -181,7 +181,7 @@ function showNamePopup() {
     const overlay = document.createElement('div');
     overlay.className = 'popup-overlay';
     overlay.innerHTML = `
-        <div class="popup-content">
+        <div class="name-popup">
             <h2>Selamat Datang di EcoQuest!</h2>
             <input type="text" id="player-name" placeholder="Masukkan nama kamu..." maxlength="15">
             <button id="start-btn" disabled>Mulai Petualangan</button>
@@ -189,11 +189,10 @@ function showNamePopup() {
     `;
     document.body.appendChild(overlay);
 
-    const popupContent = overlay.querySelector('.popup-content');
+    const popupContent = overlay.querySelector('.name-popup');
     const nameInput = overlay.querySelector('#player-name');
     const startBtn = overlay.querySelector('#start-btn');
 
-    // Cegah klik di dalam popup merembet ke document
     popupContent.addEventListener('click', e => e.stopPropagation());
 
     nameInput.addEventListener('input', () => {
