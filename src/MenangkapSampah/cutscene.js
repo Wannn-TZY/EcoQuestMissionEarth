@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const lines = [
-        "🏙️ Taman yang dulu indah kini dipenuhi sampah.",
+        "🏙️ Akibat banjir bandang yang melanda.",
         "🌧️ Saking parahnya, sampah kayak hujan dari langit",
-        "🌫️ bikin udara kotor dan semua makhluk pergi.",
+        "🌫️ bertebaran dimana-mana.",
         "🎯 Sekarang tugasmu: bersihkan taman, hentikan hujan sampah, dan kembalikan keindahan yang hilang! 🌿"
     ];
 

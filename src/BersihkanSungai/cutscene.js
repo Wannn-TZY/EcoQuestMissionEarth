@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const lines = [
-        "🌊 Sungai yang dulu bersih dan jadi sumber kehidupan, kini dipenuhi sampah dan tercemar. Ikan-ikan menghilang 🐟, airnya bau 😷, dan desa pun terdampak.",
-        "✨ Tapi masih ada harapan.",
-        "🧹 Tugasmu: kumpulkan sampah 🗑️, hindari rintangan ⚠️, dan pulihkan sungai sebelum semuanya terlambat ⏳.",
+        "🌊 🌊 Selamat datang di Misi Sungai Bersih",
+        "✨Di sebuah kota kecil, sungai yang dulu jernih kini dipenuhi limbah rumah tangga, bengkel, IT, dan proyek bangunan akibat banjir bandang.  ",
+        "🧹 Tugasmu: bersihkan sungai dari ancaman pencemaran! ",
         "💪 Bersihkan sungai. 🌱 Selamatkan masa depan!"
     ];
 

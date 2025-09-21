@@ -34,9 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
             updateUI();
             startTimer();
 
+            // spawn pertama langsung muncul
+            spawnTrash();
+
+            // spawn berikutnya lebih cepat
             spawnInterval = setInterval(() => {
                 if (isGameRunning) spawnTrash();
-            }, 1000);
+            }, 700);
 
             gameInitialized = true;
         }
@@ -66,11 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
+    // === UNLOCK LEVEL LOGIC ===
+    function unlockNextLevel(currentGame) {
+        let progress = JSON.parse(localStorage.getItem('gameProgress')) || {
+            tangkapSampah: false,
+            pilahSampah: false
+        };
+
+        if (currentGame === 'tangkapSampah') {
+            progress.tangkapSampah = true;
+            progress.pilahSampah = true; // otomatis buka level selanjutnya
+        }
+
+        localStorage.setItem('gameProgress', JSON.stringify(progress));
+    }
+
     function endGame(reason) {
         isGameRunning = false;
         clearInterval(gameInterval);
 
         if (reason === 'victory' && lives > 0) {
+            unlockNextLevel('tangkapSampah'); // ✅ simpan progress
             showVictoryPopup();
         } else if (reason === 'lives') {
             showGameOverPopup();
@@ -117,9 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUI();
         startTimer();
 
+        // spawn pertama langsung
+        spawnTrash();
+
+        // spawn lebih cepat
         spawnInterval = setInterval(() => {
             if (isGameRunning) spawnTrash();
-        }, 1000);
+        }, 700);
     }
 
     // Event listeners popup akhir game
@@ -190,11 +214,27 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
     });
 
+    // ✅ Versi spawnTrash sudah diperbaiki
     function spawnTrash() {
         if (!isGameRunning) return;
 
         const trash = document.createElement('img');
-        trash.src = `../../Asset/Sampah${Math.floor(Math.random() * 4) + 1}.jpg`;
+
+        // daftar file sampah di folder Asset/sampah
+        const trashImages = [
+            '../../Asset/sampah/amplas.png',
+            '../../Asset/sampah/flashdisk.png',
+            '../../Asset/sampah/kayu.png',
+            '../../Asset/sampah/cpu.png',
+            '../../Asset/sampah/batako.png',
+            '../../Asset/sampah/sampahteknik.png',
+            '../../Asset/sampah/kaset.png',
+            '../../Asset/sampah/pc2.png',
+            '../../Asset/sampah/tang.png'
+        ];
+
+        const randomIndex = Math.floor(Math.random() * trashImages.length);
+        trash.src = trashImages[randomIndex];
         trash.className = 'trash';
 
         const minX = 0;
@@ -203,9 +243,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         trash.style.left = `${randomX}px`;
         trash.style.top = '-50px';
+        trash.style.width = "80px";   // ukuran lebih besar
+        trash.style.height = "80px";  // ukuran lebih besar
+        trash.style.position = "absolute";
+
         gameArea.appendChild(trash);
 
         let pos = -50;
+        let caught = false; // ✅ flag untuk deteksi sudah ketangkap
+
         const fall = setInterval(() => {
             if (!isGameRunning) {
                 clearInterval(fall);
@@ -213,24 +259,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            pos += 5;
+            pos += 15; // lebih cepat jatuh
             trash.style.top = `${pos}px`;
 
             const trashRect = trash.getBoundingClientRect();
             const binRect = trashBin.getBoundingClientRect();
-            const gameAreaRect = gameArea.getBoundingClientRect();
 
+            // cek tabrakan dengan keranjang
             if (
+                !caught &&
                 trashRect.bottom >= binRect.top &&
                 trashRect.top <= binRect.bottom &&
                 trashRect.left < binRect.right &&
                 trashRect.right > binRect.left
             ) {
+                caught = true;
                 score += 10;
                 updateUI();
                 trash.remove();
                 clearInterval(fall);
-            } else if (pos > gameAreaRect.height) {
+            } 
+            // cek jatuh sampai bawah (pakai tinggi gameArea, bukan rect layar)
+            else if (!caught && pos > gameArea.clientHeight - trash.offsetHeight) {
                 decreaseLives();
                 trash.remove();
                 clearInterval(fall);

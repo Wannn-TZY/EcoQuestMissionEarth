@@ -12,10 +12,12 @@ document.addEventListener("DOMContentLoaded", function() {
     
     const stories = [
             "🌍 Selamat datang di EcoQuest: Mission Earth!",
-            "🌪️ Dunia sedang terancam oleh sampah dan polusi yang makin parah.",
-            "👣 Jejakmu di game ini bisa jadi langkah awal perubahan nyata.",
-            "🧤 Tugas kamu? Bersihkan lingkungan, pilah sampah, dan pulihkan alam!",
-            "🌿 Main sambil belajar, jadi pahlawan bumi yang dibutuhkan planet ini."
+            "🌪️ Beberapa waktu lalu, kota kecil di tepi sungai dilanda banjir bandang.",
+            "👣 menghantam bengkel, laboratorium IT, hingga proyek bangunan, lalu menyeret semua limbahnya ke sungai.",
+            "🧤 Bersihkan Sungai – klik sampah yang terbawa arus banjir sebelum makin menumpuk.",
+            "🌿 Tangkap Sampah Jatuh – amankan sampah yang beterbangan di udara agar tidak merusak kota.",
+            "🌿 Pilah & Kelola – pisahkan sesuai jenisnya: limbah rumah tangga, elektronik, bengkel, dan bangunan."
+            
 
 
     ];

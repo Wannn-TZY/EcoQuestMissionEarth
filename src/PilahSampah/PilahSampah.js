@@ -1,10 +1,19 @@
 const trashItems = [
-    { type: 'organic', image: '../../Asset/Sampah1.jpg' },
-    { type: 'inorganic', image: '../../Asset/Sampah2.jpg' },
-    { type: 'organic', image: '../../Asset/Sampah3.jpg' },
-    { type: 'organic', image: '../../Asset/Sampah4.jpg' },
-    { type: 'dangerous', image: '../../Asset/Sampah5.jpg' },
-    { type: 'dangerous', image: '../../Asset/Sampah6.jpg' },
+    { type: 'it', image: '../../Asset/sampah/cpu.png' },
+    { type: 'teknik', image: '../../Asset/sampah/mesin.png' },
+    { type: 'it', image: '../../Asset/sampah/pc2.png' },
+    { type: 'it', image: '../../Asset/sampah/processor.png' },
+    { type: 'teknik', image: '../../Asset/sampah/sampahteknik.png' },
+    { type: 'tkp', image: '../../Asset/sampah/cat.png' },
+    { type: 'tkp', image: '../../Asset/sampah/batu.png' },
+    { type: 'it', image: '../../Asset/sampah/tkj.png' },
+    { type: 'tkp', image: '../../Asset/sampah/serpihan.png' },
+    { type: 'it', image: '../../Asset/sampah/batre.png' },
+    { type: 'it', image: '../../Asset/sampah/komputer.png' },
+    { type: 'tkp', image: '../../Asset/sampah/cangkir.png' },
+    { type: 'teknik', image: '../../Asset/sampah/baut.png' },
+    { type: 'tkp', image: '../../Asset/sampah/batako.png' },
+    { type: 'teknik', image: '../../Asset/sampah/ban.png' }
 ];
 
 let score = 0;
@@ -12,13 +21,12 @@ let lives = 3;
 let timeLeft = 20;
 let gameInterval;
 let isGameOver = false;
-
-let playerName = localStorage.getItem('namaPemain') || null;
+let playerName = null;
 
 /* ====================== GAME CORE ====================== */
 function initGame() {
     updateUI();
-    generateTrash(10);
+    generateTrash(10); // spawn 10 sampah
     startTimer();
     setupDragAndDrop();
 }
@@ -34,30 +42,20 @@ function generateTrash(count) {
     const areaWidth = gameArea.offsetWidth - 60;
     const areaHeight = gameArea.offsetHeight;
 
-    const safeZoneTop = 100;
-    const safeZoneBottom = areaHeight - 70;
-    const usableHeight = safeZoneBottom - safeZoneTop;
+    if (areaWidth <= 0 || areaHeight <= 0) {
+        console.error("Game area belum punya ukuran!");
+        return;
+    }
 
-    const gridCols = 5;
-    const gridRows = 4;
-    const cellWidth = areaWidth / gridCols;
-    const cellHeight = usableHeight / gridRows;
-
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < count; i++) {
         const trash = trashItems[Math.floor(Math.random() * trashItems.length)];
         const trashElement = document.createElement('img');
         trashElement.src = trash.image;
         trashElement.className = 'trash-item';
         trashElement.dataset.type = trash.type;
 
-        const gridCol = Math.floor(Math.random() * gridCols);
-        const gridRow = Math.floor(Math.random() * gridRows);
-
-        const offsetX = Math.random() * (cellWidth - 40);
-        const offsetY = Math.random() * (cellHeight - 40);
-
-        const posX = (gridCol * cellWidth) + offsetX + 30;
-        const posY = (gridRow * cellHeight) + offsetY + safeZoneTop;
+        const posX = Math.random() * areaWidth;
+        const posY = Math.random() * (areaHeight - 100);
 
         trashElement.style.left = posX + 'px';
         trashElement.style.top = posY + 'px';
@@ -118,6 +116,7 @@ function handleDrop(e) {
 }
 
 function startTimer() {
+    if (gameInterval) clearInterval(gameInterval);
     gameInterval = setInterval(() => {
         timeLeft--;
         document.getElementById('time').textContent = timeLeft;
@@ -142,11 +141,11 @@ function endGame(result) {
     if (result === 'win') {
         document.getElementById('final-score').textContent = score;
         document.getElementById('victory-popup').classList.remove('hidden');
-        saveToLeaderboard(playerName, score, 'Pilah Sampah');
+        saveToLeaderboard(playerName || "Anonim", score, 'Pilah Sampah');
     } else {
         document.getElementById('final-score-lose').textContent = score;
         document.getElementById('gameover-popup').classList.remove('hidden');
-        saveToLeaderboard(playerName, score, 'Pilah Sampah');
+        saveToLeaderboard(playerName || "Anonim", score, 'Pilah Sampah');
     }
 }
 
@@ -164,8 +163,8 @@ function resetGame() {
 
     if (gameInterval) clearInterval(gameInterval);
 
-    const trashItems = document.querySelectorAll('.trash-item');
-    trashItems.forEach(item => item.remove());
+    const trashItemsEl = document.querySelectorAll('.trash-item');
+    trashItemsEl.forEach(item => item.remove());
 
     updateUI();
     document.getElementById('victory-popup').classList.add('hidden');
@@ -181,7 +180,7 @@ function showNamePopup() {
     const overlay = document.createElement('div');
     overlay.className = 'popup-overlay';
     overlay.innerHTML = `
-        <div class="name-popup">
+        <div class="popup-content">
             <h2>Selamat Datang di EcoQuest!</h2>
             <input type="text" id="player-name" placeholder="Masukkan nama kamu..." maxlength="15">
             <button id="start-btn" disabled>Mulai Petualangan</button>
@@ -189,10 +188,11 @@ function showNamePopup() {
     `;
     document.body.appendChild(overlay);
 
-    const popupContent = overlay.querySelector('.name-popup');
+    const popupContent = overlay.querySelector('.popup-content');
     const nameInput = overlay.querySelector('#player-name');
     const startBtn = overlay.querySelector('#start-btn');
 
+    // Cegah klik di dalam popup merembet ke document
     popupContent.addEventListener('click', e => e.stopPropagation());
 
     nameInput.addEventListener('input', () => {

@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const lines = [
-        "🏙️ Kota kita semakin bersih jika kita pilah sampah dengan benar!",
-        "🗑️ Berbagai jenis sampah akan muncul di layar.",
-        "♻️ Tugasmu adalah memasukkan sampah ke tempat yang tepat sesuai jenisnya.",
-        "🚮 Ada tempat sampah organik, anorganik, dan B3. Pilih dengan cermat ya!",
+        "🏙️ Sampah yang kalian ambil di sungai!",
+        "🗑️ dan sampah yang bertebaran sudah kalian tangkap.",
+        "♻️ sekarang saatnya kalian kumpulkan semua sampahnya",
+        "🚮 dan kalian pilah pilah sampah sesuai jenis nya!",
         "🌟 Siap jadi pahlawan lingkungan? Yuk mulai petualangan pilah sampah!"
     ];
 
