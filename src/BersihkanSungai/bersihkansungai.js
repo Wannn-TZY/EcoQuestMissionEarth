@@ -40,10 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
         sampah.className = 'sampah';
         sampah.src = sampahImages[Math.floor(Math.random() * sampahImages.length)];
         
-        const riverHeight = window.innerHeight * 0.6;
-        const padding = 50;
-        const minY = window.innerHeight - riverHeight + padding;
-        const maxY = window.innerHeight - padding;
+        // Get river container dimensions
+        const riverContainer = document.getElementById('riverContainer');
+        const riverHeight = riverContainer.offsetHeight;
+        
+        // Calculate position within river bounds
+        const padding = 20; // padding from river edges
+        const minY = riverContainer.offsetTop + padding;
+        const maxY = riverContainer.offsetTop + riverHeight - padding - 75; // subtract sampah height
         const yPos = minY + (Math.random() * (maxY - minY));
         
         sampah.style.top = `${yPos}px`;
@@ -53,15 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
         gameContainer.appendChild(sampah);  
 
         sampah.addEventListener('click', () => {
-            score += 1;
+            score += 2; // increased points per trash from 1 to 2
             scoreElement.textContent = `Score: ${score}`;
             gameContainer.removeChild(sampah);
         });
 
         let xPos = gameContainer.offsetWidth + 50;
-        const speed = 20;
+        const speed = 8; // reduced from 8 for better clickability
         
         const moveInterval = setInterval(() => {
+            if (!isGameActive) {
+                clearInterval(moveInterval);
+                return;
+            }
+            
             xPos -= speed;
             sampah.style.right = `${gameContainer.offsetWidth - xPos}px`;
 
@@ -143,7 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(gameInterval);
         clearInterval(timerInterval);
         
-        gameInterval = setInterval(createSampah, 600);
+        // Spawn trash more frequently
+        gameInterval = setInterval(createSampah, 800); // reduced from 1000ms to 800ms
         
         timerInterval = setInterval(() => {
             if (isGameActive) {
