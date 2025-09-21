@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let playerName = localStorage.getItem('playerName') || "";
+    let playerName = localStorage.getItem('playerName') || "Guest";
 
     const backgroundMusic = new Audio('../../backsound/backsound-game2.mp3');
     backgroundMusic.loop = true;
@@ -237,37 +237,46 @@ document.addEventListener('DOMContentLoaded', () => {
         trash.src = trashImages[randomIndex];
         trash.className = 'trash';
 
-        const minX = 0;
-        const maxX = getGameWidth() - 50;
+        // Get viewport width instead of game area width
+        const viewportWidth = window.innerWidth;
+        const trashWidth = 80; // width of trash image
+        const padding = 20; // padding from edges
+
+        // Calculate spawn position within visible area
+        const minX = padding;
+        const maxX = viewportWidth - trashWidth - padding;
         const randomX = Math.random() * (maxX - minX) + minX;
 
         trash.style.left = `${randomX}px`;
         trash.style.top = '-50px';
-        trash.style.width = "80px";   // ukuran lebih besar
-        trash.style.height = "80px";  // ukuran lebih besar
+        trash.style.width = "80px";
+        trash.style.height = "80px";
         trash.style.position = "absolute";
 
         gameArea.appendChild(trash);
 
+        // Rest of the falling logic
         let pos = -50;
-        let caught = false; // ✅ flag untuk deteksi sudah ketangkap
+        let caught = false;
+        let speed = 8;
 
         const fall = setInterval(() => {
             if (!isGameRunning) {
                 clearInterval(fall);
-                trash.remove();
+                if (gameArea.contains(trash)) {
+                    trash.remove();
+                }
                 return;
             }
 
-            pos += 15; // lebih cepat jatuh
+            pos += speed;
             trash.style.top = `${pos}px`;
 
             const trashRect = trash.getBoundingClientRect();
             const binRect = trashBin.getBoundingClientRect();
 
-            // cek tabrakan dengan keranjang
-            if (
-                !caught &&
+            // Check if trash is caught
+            if (!caught && 
                 trashRect.bottom >= binRect.top &&
                 trashRect.top <= binRect.bottom &&
                 trashRect.left < binRect.right &&
@@ -276,34 +285,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 caught = true;
                 score += 10;
                 updateUI();
-                trash.remove();
-                clearInterval(fall);
-            } 
-            // cek jatuh sampai bawah (pakai tinggi gameArea, bukan rect layar)
-            else if (!caught && pos > gameArea.clientHeight - trash.offsetHeight) {
-                decreaseLives();
-                trash.remove();
+                if (gameArea.contains(trash)) {
+                    trash.remove();
+                }
                 clearInterval(fall);
             }
-        }, 50);
+            // Check if trash hits bottom
+            else if (!caught && pos > window.innerHeight - trash.offsetHeight) {
+                if (!caught) {
+                    decreaseLives();
+                }
+                if (gameArea.contains(trash)) {
+                    trash.remove();
+                }
+                clearInterval(fall);
+            }
+        }, 30);
     }
 
-    // 🔹 Popup Input Nama
-    const namePopup = document.getElementById('name-popup');
-    const startGameBtn = document.getElementById('start-game-btn');
-    const nameInput = document.getElementById('player-name-input');
-
-    namePopup.classList.remove('hidden'); // tampilkan popup saat load
-
-    startGameBtn.addEventListener('click', () => {
-        const inputName = nameInput.value.trim();
-        if (inputName !== "") {
-            playerName = inputName;
-            localStorage.setItem('playerName', playerName);
-        } else {
-            playerName = "Guest";
-        }
-        namePopup.classList.add('hidden');
-        initGame();
-    });
+    // 🚀 langsung mulai game tanpa popup nama
+    initGame();
 });
