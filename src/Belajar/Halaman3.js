@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     // Efek menulis kapur
-    const text = "Sampah bangunan adalah limbah yang berasal dari pekerjaan konstruksi,\n renovasi, atau pembongkaran.\n Jumlahnya biasanya sangat banyak dan \n sering kali tidak bisa langsung dibuang ke tempat sampah biasa \n  karena bisa mencemari lingkungan atau menyumbat aliran air. \n Contoh Sampah Bangunan : \n - Batu bata pecah. \n - Kayu bekas dari bekisting atau rangka. \n - Paku, besi beton, kawat. \n - Gypsum, keramik, ubin pecah. \n - Kaleng cat, thinner, lem (termasuk B3 karena bahan kimia).";
+    const text = "Sampah bangunan adalah limbah yang berasal dari pekerjaan konstruksi,\n renovasi, atau pembongkaran.\n Jumlahnya biasanya sangat banyak dan sering kali \n tidak bisa langsung dibuang ke tempat sampah biasa \n  karena bisa mencemari lingkungan atau menyumbat aliran air. \n Contoh Sampah Bangunan : \n - Batu bata pecah. \n - Kayu bekas dari bekisting atau rangka. \n - Paku, besi beton, kawat. \n - Gypsum, keramik, ubin pecah. \n - Kaleng cat, thinner, lem (termasuk B3 karena bahan kimia).";
     let index = 0;
     let writingTimeout;
 

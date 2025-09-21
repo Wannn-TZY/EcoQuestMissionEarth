@@ -19,11 +19,11 @@ body {
 .chalk-text {
   position: absolute;
   top: 35%;  /* atur biar pas di papan */
-  left: 57%;
+  left: 55%;
   transform: translateX(-50%);
   width: 70%;
   font-family: "Comic Sans MS", cursive, sans-serif;
-  font-size: 28px;
+  font-size: 19px;
   color: white;
   text-shadow: 1px 1px 2px #333, 0 0 5px #fff;
   white-space: pre-wrap;
@@ -35,13 +35,12 @@ body {
     cursor: pointer;
     transition: transform 0.2s;
     position: absolute;
-    bottom: 10%;
-    left: 65%;
-    transform: translateX(-50%);
+    bottom: 1%;
+    left: 60%;
 }
 
 .it {
-    width: 350px;
+    width: 250px;
     height: auto;
     cursor: pointer;
     transition: transform 0.2s;

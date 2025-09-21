@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Efek menulis kapur
-    const text ="Sampah teknik mesin/otomotif adalah limbah yang dihasilkan dari perbaikan,\n perawatan, atau pembuatan komponen kendaraan/mesin.\n Banyak dari sampah ini yang tidak bisa terurai secara alami \n dan ada juga yang berbahaya (B3)\n karena mengandung minyak, oli, dan bahan kimia.\n Contoh Sampah Teknik Mesin & Kendaraan : \n - Knalpot & filter bekas. \n -Ban bekas. \n -Serpihan logam/besi dari bubut atau las. \n -Serpihan logam/besi dari bubut atau las.";
+    const text ="Sampah teknik mesin/otomotif adalah limbah yang dihasilkan dari perbaikan,\n perawatan, atau pembuatan komponen kendaraan/mesin.\n Banyak dari sampah ini yang tidak bisa terurai secara alami \n dan ada juga yang berbahaya (B3)\n karena mengandung minyak, oli, dan bahan kimia.\n Contoh Sampah Teknik Mesin & Kendaraan : \n - Knalpot & filter bekas. \n -Ban bekas. \n -Serpihan logam/besi dari bubut atau las.";
     let index = 0;
     let writingTimeout;
 
