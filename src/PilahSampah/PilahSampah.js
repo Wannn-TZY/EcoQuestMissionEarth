@@ -39,13 +39,20 @@ function updateUI() {
 
 function generateTrash(count) {
     const gameArea = document.getElementById('game-area');
-    const areaWidth = gameArea.offsetWidth - 60;
-    const areaHeight = gameArea.offsetHeight;
+    
+    // Calculate safe spawn area
+    const padding = 100; // padding from edges
+    const safeWidth = Math.min(gameArea.offsetWidth - 100, window.innerWidth - padding);
+    const safeHeight = Math.min(gameArea.offsetHeight - 100, window.innerHeight * 0.4); // Use 40% of viewport height
 
-    if (areaWidth <= 0 || areaHeight <= 0) {
-        console.error("Game area belum punya ukuran!");
+    if (safeWidth <= 0 || safeHeight <= 0) {
+        console.error("Game area dimensions invalid!");
         return;
     }
+
+    // Clear existing trash
+    const existingTrash = document.querySelectorAll('.trash-item');
+    existingTrash.forEach(item => item.remove());
 
     for (let i = 0; i < count; i++) {
         const trash = trashItems[Math.floor(Math.random() * trashItems.length)];
@@ -54,11 +61,13 @@ function generateTrash(count) {
         trashElement.className = 'trash-item';
         trashElement.dataset.type = trash.type;
 
-        const posX = Math.random() * areaWidth;
-        const posY = Math.random() * (areaHeight - 100);
+        // Calculate position within safe area
+        const posX = padding/2 + Math.random() * (safeWidth - padding);
+        const posY = padding/2 + Math.random() * (safeHeight - padding);
 
-        trashElement.style.left = posX + 'px';
-        trashElement.style.top = posY + 'px';
+        // Ensure trash doesn't overlap too much
+        trashElement.style.left = `${posX}px`;
+        trashElement.style.top = `${posY}px`;
 
         gameArea.appendChild(trashElement);
     }
@@ -173,52 +182,32 @@ function resetGame() {
     initGame();
 }
 
-/* ====================== POPUP NAMA ====================== */
-function showNamePopup() {
-    if (document.querySelector('.popup-overlay')) return;
-
-    const overlay = document.createElement('div');
-    overlay.className = 'popup-overlay';
-    overlay.innerHTML = `
-        <div class="popup-content">
-            <h2>Selamat Datang di EcoQuest!</h2>
-            <input type="text" id="player-name" placeholder="Masukkan nama kamu..." maxlength="15">
-            <button id="start-btn" disabled>Mulai Petualangan</button>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-
-    const popupContent = overlay.querySelector('.popup-content');
-    const nameInput = overlay.querySelector('#player-name');
-    const startBtn = overlay.querySelector('#start-btn');
-
-    // Cegah klik di dalam popup merembet ke document
-    popupContent.addEventListener('click', e => e.stopPropagation());
-
-    nameInput.addEventListener('input', () => {
-        startBtn.disabled = nameInput.value.trim().length < 3;
+function setupButtons() {
+    // Victory popup buttons
+    document.getElementById('play-again').addEventListener('click', () => {
+        resetGame();
     });
 
-    startBtn.addEventListener('click', () => {
-        const name = nameInput.value.trim();
-        if (name.length >= 3) {
-            localStorage.setItem('namaPemain', name);
-            playerName = name;
-
-            try {
-                backgroundMusic.play().catch(err => {
-                    console.warn('Audio play failed:', err);
-                });
-            } catch (err) {
-                console.warn('Audio play error:', err);
-            }
-
-            overlay.remove();
-            initGame();
-        }
+    document.getElementById('back-to-menu').addEventListener('click', () => {
+        window.location.href = '../PilihPermainan/PilihPermainan.html';
     });
 
-    setTimeout(() => nameInput.focus(), 50);
+    document.getElementById('leaderboard').addEventListener('click', () => {
+        window.location.href = '../LeaderboardPermainan/Leaderboard.html';
+    });
+
+    // Game over popup buttons
+    document.getElementById('play-again-lose').addEventListener('click', () => {
+        resetGame();
+    });
+
+    document.getElementById('back-to-menu-lose').addEventListener('click', () => {
+        window.location.href = '../PilihPermainan/PilihPermainan.html';
+    });
+
+    document.getElementById('leader-board').addEventListener('click', () => {
+        window.location.href = '../LeaderboardPermainan/Leaderboard.html';
+    });
 }
 
 /* ====================== AUDIO + ENTRY ====================== */
@@ -236,9 +225,12 @@ document.addEventListener('click', tryPlayBackgroundOnce, { once: true });
 
 /* ====================== MAIN ENTRY ====================== */
 document.addEventListener('DOMContentLoaded', () => {
-    if (playerName) {
-        initGame();
-    } else {
-        showNamePopup();
-    }
+    // Set default player name
+    playerName = localStorage.getItem('playerName') || "Guest";
+
+    // Setup button handlers
+    setupButtons();
+
+    // Start game immediately
+    initGame();
 });

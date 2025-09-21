@@ -35,15 +35,16 @@ body {
 
 .trash-item {
     position: absolute;
-    width: 200px;  /* Reduced from 60px */
-    height: 200px; /* Reduced from 60px */
+    width: 80px;   /* Reduced from 120px */
+    height: 80px;  /* Reduced from 120px */
     cursor: pointer;
     transition: transform 0.2s;
     object-fit: contain;
 }
 
+/* Adjust hover scale to be more subtle for smaller items */
 .trash-item:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .trash-bins {
@@ -53,7 +54,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 100px;
+    gap: 40px; /* Reduced from 100px */
     padding: 0 20px;
     z-index: 10;
 }
@@ -63,11 +64,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 500px; /* Tetapkan lebar spesifik */
+    width: 250px; /* Reduced from 500px */
 }
 
 .bin img {
-    width: 350px;
+    width: 180px; /* Reduced from 350px */
     height: auto;
     object-fit: contain;
     display: block;
@@ -77,6 +78,7 @@ body {
 .bin p {
     margin: 5px 0 0 0;
     color: white;
+    font-size: 14px; /* Added smaller font size */
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
