@@ -183,12 +183,28 @@ function resetGame() {
 }
 
 function setupButtons() {
-    // Victory popup buttons
     document.getElementById('play-again').addEventListener('click', () => {
         resetGame();
     });
 
     document.getElementById('back-to-menu').addEventListener('click', () => {
+        // Only update progress if game was won (no trash remaining)
+        const remainingTrash = document.querySelectorAll('.trash-item').length;
+        if (remainingTrash === 0 && lives > 0) {  // Victory condition
+            const gameProgress = JSON.parse(localStorage.getItem('gameProgress')) || {
+                bersihkanSungai: false,
+                tangkapSampah: false,
+                pilahSampah: false
+            };
+            
+            // Keep previous progress and mark third game as completed
+            gameProgress.pilahSampah = true;
+            
+            // Save progress
+            localStorage.setItem('gameProgress', JSON.stringify(gameProgress));
+        }
+        
+        // Return to menu
         window.location.href = '../PilihPermainan/PilihPermainan.html';
     });
 
@@ -196,7 +212,6 @@ function setupButtons() {
         window.location.href = '../LeaderboardPermainan/Leaderboard.html';
     });
 
-    // Game over popup buttons
     document.getElementById('play-again-lose').addEventListener('click', () => {
         resetGame();
     });

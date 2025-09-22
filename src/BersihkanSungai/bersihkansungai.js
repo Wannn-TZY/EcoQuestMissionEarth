@@ -15,12 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let score = 0;
     let lives = 3;
-    let timeLeft = 60;
+    let timeLeft = 45;
     let gameInterval;
     let timerInterval;
     let isGameActive = false;
 
-    // pakai nama dari localStorage, kalau kosong → "Guest"
     let playerName = localStorage.getItem('playerName') || "Guest";
 
     const sampahImages = [
@@ -40,14 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
         sampah.className = 'sampah';
         sampah.src = sampahImages[Math.floor(Math.random() * sampahImages.length)];
         
-        // Get river container dimensions
         const riverContainer = document.getElementById('riverContainer');
         const riverHeight = riverContainer.offsetHeight;
         
-        // Calculate position within river bounds
-        const padding = 20; // padding from river edges
+        const padding = 20;
         const minY = riverContainer.offsetTop + padding;
-        const maxY = riverContainer.offsetTop + riverHeight - padding - 75; // subtract sampah height
+        const maxY = riverContainer.offsetTop + riverHeight - padding - 75;
         const yPos = minY + (Math.random() * (maxY - minY));
         
         sampah.style.top = `${yPos}px`;
@@ -57,13 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
         gameContainer.appendChild(sampah);  
 
         sampah.addEventListener('click', () => {
-            score += 2; // increased points per trash from 1 to 2
+            score += 2;
             scoreElement.textContent = `Score: ${score}`;
             gameContainer.removeChild(sampah);
         });
 
         let xPos = gameContainer.offsetWidth + 50;
-        const speed = 8; // reduced from 8 for better clickability
+        const speed = 8;
         
         const moveInterval = setInterval(() => {
             if (!isGameActive) {
@@ -99,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGame() {
         score = 0;
         lives = 3;
-        timeLeft = 60;
+        timeLeft = 45;
         isGameActive = true;
         
         scoreElement.textContent = `Score: ${score}`;
@@ -118,6 +115,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('play-again').addEventListener('click', resetGame);
     document.getElementById('play-again-lose').addEventListener('click', resetGame);
     document.getElementById('back-to-menu').addEventListener('click', () => {
+        // Mengubah kondisi kemenangan - hapus pengecekan timeLeft
+        if (score >= 100 && lives > 0) {
+    if (typeof window.updateGameProgress === "function") {
+        window.updateGameProgress('bersihkanSungai');
+    } else {
+        // fallback kalau dipanggil langsung tanpa PilihPermainan.js
+        const gameProgress = JSON.parse(localStorage.getItem('gameProgress')) || {
+            bersihkanSungai: false,
+            tangkapSampah: false,
+            pilahSampah: false
+        };
+        gameProgress.bersihkanSungai = true;
+        localStorage.setItem('gameProgress', JSON.stringify(gameProgress));
+    }
+}
+
+        
+        // Return to menu
         window.location.href = '../PilihPermainan/PilihPermainan.html';
     });
     document.getElementById('back-to-menu-lose').addEventListener('click', () => {
@@ -142,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function startGame() {
         score = 0;
         lives = 3;
-        timeLeft = 60;
+        timeLeft = 45;
         isGameActive = true;
         
         scoreElement.textContent = `Score: ${score}`;
@@ -152,8 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(gameInterval);
         clearInterval(timerInterval);
         
-        // Spawn trash more frequently
-        gameInterval = setInterval(createSampah, 800); // reduced from 1000ms to 800ms
+        gameInterval = setInterval(createSampah, 800);
         
         timerInterval = setInterval(() => {
             if (isGameActive) {
@@ -194,38 +208,36 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
     }
 
-   /* ====================== POPUP NAMA ====================== */
-function showNamePopup() {
-    if (document.querySelector('.popup-overlay')) return;
+    function showNamePopup() {
+        if (document.querySelector('.popup-overlay')) return;
 
-    const overlay = document.createElement('div');
-    overlay.className = 'popup-overlay';
-    overlay.innerHTML = `
-        <div class="name-popup">
-            <h2>Selamat Datang di EcoQuest!</h2>
-            <input type="text" id="player-name" placeholder="Masukkan nama kamu..." maxlength="15">
-            <button id="start-btn" disabled>Mulai Bermain</button>
-        </div>
-    `;
-    document.body.appendChild(overlay);
+        const overlay = document.createElement('div');
+        overlay.className = 'popup-overlay';
+        overlay.innerHTML = `
+            <div class="name-popup">
+                <h2>Selamat Datang di EcoQuest!</h2>
+                <input type="text" id="player-name" placeholder="Masukkan nama kamu..." maxlength="15">
+                <button id="start-btn" disabled>Mulai Bermain</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
 
-    const nameInput = overlay.querySelector('#player-name');
-    const startBtn = overlay.querySelector('#start-btn');
+        const nameInput = overlay.querySelector('#player-name');
+        const startBtn = overlay.querySelector('#start-btn');
 
-    nameInput.addEventListener('input', () => {
-        startBtn.disabled = nameInput.value.trim() === "";
-    });
+        nameInput.addEventListener('input', () => {
+            startBtn.disabled = nameInput.value.trim() === "";
+        });
 
-    startBtn.addEventListener('click', () => {
-        playerName = nameInput.value.trim() || "Guest";
-        localStorage.setItem('playerName', playerName);
+        startBtn.addEventListener('click', () => {
+            playerName = nameInput.value.trim() || "Guest";
+            localStorage.setItem('playerName', playerName);
 
-        overlay.remove();
-        startGame();
-    });
-}
+            overlay.remove();
+            startGame();
+        });
+    }
 
-// 🚀 tampilkan popup nama sebelum mulai
-showNamePopup();
-
+    // 🚀 tampilkan popup nama sebelum mulai
+    showNamePopup();
 });

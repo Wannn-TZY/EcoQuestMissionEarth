@@ -8,13 +8,37 @@
 </head>
 <body>
     <div class="container">
-        <img src="../../Asset/BersihkanSungai.jpg" id="btn-bersihkansungai" class="sungai" alt="bersihkansungai">
-        <img src="../../Asset/MenangkapSampah.jpg" id="btn-tangkapsampah" class="tangkapsampah" alt="tangkapsampah">
-        <img src="../../Asset/PilahSampah.jpg" id="btn-pilahsampah" class="PilahSampah" alt="PilahSampah">
-        <img src="../../Asset/TombolKembali.jpg" id="btn-kembali" class="Kembali" alt="Kembali">
+        <!-- Tombol Game -->
+        <div class="game-btn-wrapper">
+            <img src="../../Asset/BersihkanSungai.jpg" 
+                 id="btn-bersihkansungai" 
+                 class="game-btn sungai" 
+                 alt="Bersihkan Sungai" 
+                 data-game="bersihkanSungai">
+        </div>
+
+        <div class="game-btn-wrapper">
+            <img src="../../Asset/MenangkapSampah.jpg" 
+                 id="btn-tangkapsampah" 
+                 class="game-btn tangkapsampah" 
+                 alt="Tangkap Sampah" 
+                 data-game="tangkapSampah">
+        </div>
+
+        <div class="game-btn-wrapper">
+            <img src="../../Asset/PilahSampah.jpg" 
+                 id="btn-pilahsampah" 
+                 class="game-btn pilahsampah" 
+                 alt="Pilah Sampah" 
+                 data-game="pilahSampah">
+        </div>
+
+        <!-- Tombol Navigasi -->
+        <img src="../../Asset/TombolKembali.jpg" id="btn-kembali" class="kembali" alt="Kembali">
         <img src="../../Asset/VolumeAktif.jpg" id="btn-volume" class="volume" alt="VolumeAktif">
+        <!-- <button id="btn-restart" class="restart">Reset Game</button> -->
     </div>
+
     <script src="PilihPermainan.js"></script>
 </body>
-
 </html>

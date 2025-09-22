@@ -1,3 +1,4 @@
+/* Reset dasar */
 body {
     margin: 0;
     padding: 0;
@@ -13,9 +14,52 @@ body {
     position: relative;
     width: 100%;
     height: 100vh;
-    
 }
 
+/* Wrapper tombol game */
+.game-btn-wrapper {
+    position: absolute;
+    width: 160px; /* Reduced from 200px */
+    height: auto;
+    text-align: center;
+}
+
+/* Posisi spesifik untuk setiap game */
+.game-btn-wrapper:nth-child(1) { /* Bersihkan Sungai */
+    top: 75%;
+    left: 20%;
+    transform: translateY(-50%);
+}
+
+.game-btn-wrapper:nth-child(2) { /* Tangkap Sampah */
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.game-btn-wrapper:nth-child(3) { /* Pilah Sampah */
+    top: 75%;
+    right: 20%;
+    transform: translateY(-50%);
+}
+
+/* Style umum tombol */
+.game-btn {
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 10px;
+    -webkit-transition: transform 0.3s ease-in-out;
+    -moz-transition: transform 0.3s ease-in-out;
+    -ms-transition: transform 0.3s ease-in-out;
+    -o-transition: transform 0.3s ease-in-out;
+}
+
+.game-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Tombol navigasi */
 .volume {
     position: absolute;
     top: 20px;
@@ -24,7 +68,7 @@ body {
     cursor: pointer;
 }
 
-.Kembali {
+.kembali {
     position: absolute;
     top: 20px;
     left: 20px;
@@ -32,59 +76,45 @@ body {
     cursor: pointer;
 }
 
-.sungai {
+/* State terkunci */
+.locked {
+    filter: grayscale(100%) brightness(40%);
+    cursor: not-allowed;
+    position: relative;
+}
+
+.lock-icon {
     position: absolute;
-    bottom: 20%;
-    left: 15%;
-    width: 150px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    pointer-events: none;
 }
 
-.sungai:hover {
-    transform: scale(1.1);
-}
-
-.pilihsampah {
+/* Update restart button style */
+.restart {
     position: absolute;
-    bottom: 35%;
-    right: 15%;
-    width: 150px;
+    top: 20px;
+    right: 90px;
+    padding: 10px 20px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
-    transition: transform 0.3s ease-in-out;
+    transition: all 0.3s ease;
 }
 
-.pilihsampah:hover {
-    transform: scale(1.1);
+.restart:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
 }
 
-.tangkapsampah {
-    position: absolute;
-    bottom: 35%;
-    left: 40%;
-    transform: translateX(-50%);
-    width: 150px;
-    cursor: pointer;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transition: transform 0.3s ease-in-out;
-}
-
-.tangkapsampah:hover {
-    transform: translateX(-50%) scale(1.1);
-}
-
-.PilahSampah {
-    position: absolute;
-    bottom: 16%;
-    right: 35%;
-    width: 150px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-
-.PilahSampah:hover {
-    transform: scale(1.1);
+.restart:active {
+    transform: scale(0.95);
 }

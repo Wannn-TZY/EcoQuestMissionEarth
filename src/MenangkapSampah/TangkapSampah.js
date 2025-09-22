@@ -5,10 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.5;
 
-    backgroundMusic.addEventListener('error', (e) => {
-        console.log('Error loading audio:', e);
-    });
-
     document.addEventListener('click', function initAudio() {
         backgroundMusic.play().catch(e => console.error('Audio play failed:', e));
         document.removeEventListener('click', initAudio);
@@ -34,10 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updateUI();
             startTimer();
 
-            // spawn pertama langsung muncul
             spawnTrash();
 
-            // spawn berikutnya lebih cepat
             spawnInterval = setInterval(() => {
                 if (isGameRunning) spawnTrash();
             }, 700);
@@ -63,26 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (timer === 0 && lives > 0) {
                         endGame('victory');
                     }
-                } else {
-                    clearInterval(gameInterval);
                 }
             }
         }, 1000);
-    }
-
-    // === UNLOCK LEVEL LOGIC ===
-    function unlockNextLevel(currentGame) {
-        let progress = JSON.parse(localStorage.getItem('gameProgress')) || {
-            tangkapSampah: false,
-            pilahSampah: false
-        };
-
-        if (currentGame === 'tangkapSampah') {
-            progress.tangkapSampah = true;
-            progress.pilahSampah = true; // otomatis buka level selanjutnya
-        }
-
-        localStorage.setItem('gameProgress', JSON.stringify(progress));
     }
 
     function endGame(reason) {
@@ -90,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(gameInterval);
 
         if (reason === 'victory' && lives > 0) {
-            unlockNextLevel('tangkapSampah'); // ✅ simpan progress
             showVictoryPopup();
         } else if (reason === 'lives') {
             showGameOverPopup();
@@ -99,13 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveToLeaderboard(score, game) {
         const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-        const newEntry = {
+        leaderboard.push({
             name: playerName || "Guest",
             score,
             game,
             date: new Date().toISOString()
-        };
-        leaderboard.push(newEntry);
+        });
         localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
     }
 
@@ -137,18 +112,32 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUI();
         startTimer();
 
-        // spawn pertama langsung
         spawnTrash();
 
-        // spawn lebih cepat
         spawnInterval = setInterval(() => {
             if (isGameRunning) spawnTrash();
         }, 700);
     }
 
-    // Event listeners popup akhir game
+    // tombol popup
     document.getElementById('play-again').addEventListener('click', resetGame);
     document.getElementById('back-to-menu').addEventListener('click', () => {
+        // Only update progress if game was won (timer reached 0 with lives remaining)
+        if (timer === 0 && lives > 0) {  // Victory condition
+            const gameProgress = JSON.parse(localStorage.getItem('gameProgress')) || {
+                bersihkanSungai: false,
+                tangkapSampah: false,
+                pilahSampah: false
+            };
+            
+            // Keep first game progress and mark second game as completed
+            gameProgress.tangkapSampah = true;
+            
+            // Save progress
+            localStorage.setItem('gameProgress', JSON.stringify(gameProgress));
+        }
+        
+        // Return to menu
         window.location.href = '../PilihPermainan/PilihPermainan.html';
     });
     document.getElementById('play-again-lose').addEventListener('click', resetGame);
@@ -173,11 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let trashBinX = gameArea.clientWidth / 2;
     const trashBinSpeed = 20;
 
-    function getGameWidth() {
-        return gameArea.clientWidth;
-    }
-
-    // Control pakai mouse
     gameArea.addEventListener('mousemove', (e) => {
         if (!isGameRunning) return;
 
@@ -189,11 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
         trashBin.style.left = `${trashBinX}px`;
     });
 
-    // Control pakai keyboard
     document.addEventListener('keydown', (e) => {
         if (!isGameRunning) return;
 
-        const gameWidth = getGameWidth();
+        const gameWidth = gameArea.clientWidth;
         if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
             trashBinX = Math.max(0, trashBinX - trashBinSpeed);
         } else if (['ArrowRight', 'd', 'D'].includes(e.key)) {
@@ -202,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
         trashBin.style.left = `${trashBinX}px`;
     });
 
-    // Control pakai touch
     gameArea.addEventListener('touchmove', (e) => {
         if (!isGameRunning) return;
 
@@ -214,13 +196,10 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
     });
 
-    // ✅ Versi spawnTrash sudah diperbaiki
     function spawnTrash() {
         if (!isGameRunning) return;
 
         const trash = document.createElement('img');
-
-        // daftar file sampah di folder Asset/sampah
         const trashImages = [
             '../../Asset/sampah/amplas.png',
             '../../Asset/sampah/flashdisk.png',
@@ -237,12 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
         trash.src = trashImages[randomIndex];
         trash.className = 'trash';
 
-        // Get viewport width instead of game area width
         const viewportWidth = window.innerWidth;
-        const trashWidth = 80; // width of trash image
-        const padding = 20; // padding from edges
+        const trashWidth = 80;
+        const padding = 20;
 
-        // Calculate spawn position within visible area
         const minX = padding;
         const maxX = viewportWidth - trashWidth - padding;
         const randomX = Math.random() * (maxX - minX) + minX;
@@ -255,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gameArea.appendChild(trash);
 
-        // Rest of the falling logic
         let pos = -50;
         let caught = false;
         let speed = 8;
@@ -275,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const trashRect = trash.getBoundingClientRect();
             const binRect = trashBin.getBoundingClientRect();
 
-            // Check if trash is caught
             if (!caught && 
                 trashRect.bottom >= binRect.top &&
                 trashRect.top <= binRect.bottom &&
@@ -289,9 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     trash.remove();
                 }
                 clearInterval(fall);
-            }
-            // Check if trash hits bottom
-            else if (!caught && pos > window.innerHeight - trash.offsetHeight) {
+            } else if (!caught && pos > window.innerHeight - trash.offsetHeight) {
                 if (!caught) {
                     decreaseLives();
                 }
@@ -303,6 +276,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 30);
     }
 
-    // 🚀 langsung mulai game tanpa popup nama
     initGame();
 });
